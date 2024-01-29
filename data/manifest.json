@@ -1,0 +1,15 @@
+{
+  "name": "ToMar24",
+  "short_name": "ToMar24",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#eee",
+  "description": "ToMar24",
+  "icons": [
+    {
+      "src": "../icons/ToMar24.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    }
+  ]
+}

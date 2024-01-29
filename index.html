@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="manifest" href="data/manifest.json"/>
+	<link rel="icons" href="icons"/>	
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="js/style.css">
+	<script src="js/main.js" type="module"></script>
+	<title>ToMar 24</title>
+</head>
+<body>
+	<main>
+		<section class-"statsArea">
+			<span class="stat">
+				<b>Solved:&nbsp;</b>
+				<span id="totalSolved">0</span>
+			</span>
+			<span class="stat">
+				<b>Played:&nbsp;</b>
+				<span id="totalPlayed">0</span>
+			</span>
+			<span class="stat">
+				<b>Current:&nbsp;</b>
+				<span id="currentStreak">0</span>
+			</span>
+			<span class="stat">
+				<b>Longest:&nbsp;</b>
+				<span id="longestStreak">0</span>
+			</span>
+		</section>
+		<section class="operatorButtons">
+			<button class="button oper" id="leftParen" title="Left Parenthesis" aria-label="Insert Left Parenthesis" tabindex="0">(</button>
+			<button class="button oper" id="plusSign" title="Plus Sign" aria-label="Insert Plus Sign" tabindex="0">+</button>
+			<button class="button oper" id="minusSign" title="Minus Sign" aria-label="Insert Minus Sign" tabindex="0">-</button>
+			<button class="button oper" id="multiplicationSign" title="Multiplication Sign" aria-label="Insert Multiplication Sign" tabindex="0">*</button>
+			<button class="button oper" id="divisionSign" title="Division Sign" aria-label="Insert Division Sign" tabindex="0">/</button>
+			<button class="button oper" id="rightParen" title="Right Parenthesis" aria-label="Insert Right Parenthesis" tabindex="0">)</button>
+		</section>
+		<section class="puzzleButtons">
+			<button class="button number" id="arg0" title="Number Button 1" aria-label="Number Button 1" tabindex="0">3</button>
+			<button class="button number" id="arg1" title="Number Button 2" aria-label="Number Button 2" tabindex="0">7</button>
+			<button class="button number" id="arg2" title="Number Button 3" aria-label="Number Button 3" tabindex="0">8</button>
+			<button class="button number" id="arg3" title="Number Button 4" aria-label="Number Button 4" tabindex="0">13</button>
+		</section>
+		<br><br><br>
+		<div class="guess" id="guess"> Guess goes here </div>
+		<br><br>
+		<section class="navigation">
+			<button class="button nav" id="evaluate" title="Evaluate guess" aria-label="Evaluate guess" tabindex="0">Check</button>
+			<button class="button nav" id="back" title="Backspace" aria-label="Backspace" tabindex="0">Back</button>
+			<button class="button nav" id="clear" title="Clear guess" aria-label="Clear guess" tabindex="0">Clear</button>
+			<button class="button nav" id="giveUp" title="Show solution" aria-label="Show solution" tabindex="0">Give Up</button>
+		</section>
+		<section class="feedbackArea">
+            <div class="appTitle">
+                <p tabindex="0">ToMar24</p>
+            </div>
+            <hr/>
+            <div id="feedbackItems">
+			<!-- this will be where we do a foreach on  -->
+				<div>8 + 8 + 9 + 1 = 26</div>
+            </div>
+
+		</section>
+	</main>
+</body>
+</html>
