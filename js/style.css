@@ -74,14 +74,23 @@ section {
 .button.oper {
 	display: flex;
 	justify-content: space-around;
-	font-size: 2rem;
+	font-size: 2em;
 	background-color: darkorange;
 	padding: .5em;
 	margin-top: 0.5em;
 	margin-bottom: 0.5rem;
 }
+.button.paren {
+	display: flex;
+	justify-content: space-around;
+	font-size: 2em;
+	background-color: goldenrod;
+	padding: .5em;
+	margin-top: 0.5em;
+	margin-bottom: 0.5rem;
+}
 .button.number {
-	font-size: 3rem;
+	font-size: 2.5em;
 	background-color: olivedrab;
 	padding: .5em;
 	margin-top: 0.5em;
@@ -110,9 +119,18 @@ section {
 .feedbackArea .appTitle {
 	text-align: center;
 }
+.feedbackArea .feedbackItems {
+	text-align: center;
+}
 .feedbackArea .item {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
 	padding-top: 1rem;
+}
+.message {
+	text-align: center;
+	color: red;
+	background-color: black;;
+	font-size: 1em;
 }

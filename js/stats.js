@@ -1,6 +1,7 @@
 export default class Stats {
 	constructor() {
 		this._totalGames = 0;
+		this._totalGuesses = 0;
 		this._totalSolved = 0;
 		this._currentStreak = 0;
 		this._longestStreak = 0;
@@ -8,12 +9,16 @@ export default class Stats {
 		let statsObject = localStorage.getItem("tm24stats");
 		if (typeof statsObject === "string") {
 			let stored = JSON.parse(statsObject);
-			this.setTotalGames(stored["totalGames"]);
-			this.setTotalSolved(stored["totalSolved"]);
-			this.setCurrentStreak(stored["currentStreak"]);
-			this.setLongestStreak(stored["longestStreak"]);
-			this.setCurrentPuzzle(stored["currentPuzzle"]);
+			this.setTotalGames(stored["_totalGames"]);
+			this.setTotalSolved(stored["_totalSolved"]);
+			this.setTotalSolved(stored["_totalGuesses"]);
+			this.setCurrentStreak(stored["_currentStreak"]);
+			this.setLongestStreak(stored["_longestStreak"]);
+			this.setCurrentPuzzle(stored["_currentPuzzle"]);
 		}
+	}
+	saveStatsObject(jsonInput) {
+		localStorage.setItem("tm24stats", JSON.stringify(jsonInput));
 	}
 	getCurrentPuzzle() {
 		return this._currentPuzzle;
@@ -21,20 +26,24 @@ export default class Stats {
 	setCurrentPuzzle(puz) {
 		this._currentPuzzle = puz;
 	}
-	saveStatsObject(jsonInput) {
-		localStorage.setItem("tm24stats", JSON.stringify(jsonInput));
-	}
 	getTotalGames() {
 		return this._totalGames;
 	}
+	
 	setTotalGames(value) {
-		this._totalGames = value;
+		if (value > 0) this._totalGames = value;
+	}
+	getTotalGuesses() {
+		return this._totalGuesses;
+	}
+	setTotalGuesses(value) {
+		if (value > 0) this._totalGuesses = value;
 	}
 	getTotalSolved() {
 		return this._totalSolved;
 	}
 	setTotalSolved(value) {
-		this._totalSolved = value;
+		if (value > 0) this._totalSolved = value;
 	}
 	getCurrentStreak() {
 		return this._currentStreak;
@@ -46,6 +55,6 @@ export default class Stats {
 		return this._longestStreak;
 	}
 	setLongestStreak(value) {
-		this._longestStreak = value;
+		if (value > 0) this._longestStreak = value;
 	}
 }

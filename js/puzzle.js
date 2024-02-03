@@ -1,29 +1,55 @@
 import Argument from "./argument.js";
 export default class Puzzle {
 	constructor(puzzle) {
-		console.log(puzzle);
+		// console.log(puzzle);
 		this._arguments = [];
 		let args = "0123";
-		puzzle["puz"].forEach((item) => {
-			let idx = Math.floor(Math.random() * args.length);
-			this._arguments.push(new Argument(idx, item));
-			args = `${args.substring(0, args.indexOf(idx))}${args.substring(args.indexOf(idx) + 1)}`;
+		puzzle["puz"].forEach((item, index) => {
+			let rnd = Math.floor(Math.random() * args.length);
+			let idx = parseInt(args.substring(rnd, rnd + 1));
+			// console.log(`selected index ${idx} for item ${item}`);
+			this._arguments.push(new Argument(index, idx, item));
+			args = `${args.substring(0, rnd)}${args.substring(rnd + 1)}`;
+			// console.log(`args is now ${args}`);
 		});
+		// console.log(this._arguments);
 		this._solution = puzzle["sol"];
-		this._feedback = ["Feedback goes here"];
+		this._feedback = [];
 		this._guess = [];
 	}
+	clearGuess() {
+		this._guess = [];
+	}
+	backSpace() {
+		if (this._guess.length > 0) {
+			let item = this._guess.pop();
+			if (typeof(item) != "string") {
+				item.setDisabled(false);
+				return {"guess": this.getGuessAsString(), "arg": item.getIndex()};
+			} else {
+				return {"guess": this.getGuessAsString(), "arg": null};
+			}
+		} else {
+			return {"guess": this.getGuessAsString(), "arg": null};
+		}
+	}
 	validSolution() {
-		let allArgumentsUsed = true;
+		let allArgumentsUsed = true, result = null;
 		for (let i = 0; i < this._arguments.length; i++) {
 			if (this._arguments[i].getDisabled() == false) {
 				allArgumentsUsed = false;
 				break;
 			}
 		}
-		if (!allArgumentsUsed) { return false; }
-		// check parentheses here
-		return true;
+		try {
+			result = eval(this.getGuessAsString());
+		} catch (error) {
+			return {"valid": false, "message": error};
+		}
+		if (!allArgumentsUsed) {
+			return {"valid": false, "message": "Must use all the numbers"};
+		}
+		return {"valid": true, "message": result};
 	}
 	getFeedback() {
 		return this._feedback;
@@ -31,7 +57,14 @@ export default class Puzzle {
 	getArguments() {
 		return this._arguments;
 	}
-	setArgumments(list) {
+	getArgumentByIndex(idx) {
+		for (let i = 0; i < this._arguments.length; i++) {
+			if (this._arguments[i].getIndex() == idx) {
+				return i;
+			}
+		}
+	}
+	setArguments(list) {
 		this._arguments = list;
 	}
 	getSolution() {
@@ -58,6 +91,17 @@ export default class Puzzle {
 		return guessDisplay.join(" ");
 	}
 	addTokenToGuess(x) {
-		this._guess.push(x);
+		if (x.length < 4) {
+			this._guess.push(x);
+		} else {
+			let idx = parseInt(x.substring(3));
+			for (var i = 0; i < 4; i++) {
+				if (this._arguments[i]._index == idx) {
+					this._guess.push(this._arguments[i]);
+					this._arguments[i].setDisabled(true);
+				}
+			}
+		}
+		// console.log(this._guess);
 	}
 }

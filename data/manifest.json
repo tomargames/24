@@ -7,8 +7,8 @@
   "description": "ToMar24",
   "icons": [
     {
-      "src": "../icons/ToMar24.png",
-      "sizes": "48x48",
+      "src": "../icons/ToMar24144.png",
+      "sizes": "144x144",
       "type": "image/png"
     }
   ]

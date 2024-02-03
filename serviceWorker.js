@@ -4,17 +4,21 @@ const assets = [
   "/index.html",
   "/js/style.css",
   "/js/main.js",
-  "/icons/ToMar24.png"
+  "/js/argument.js",
+  "/js/puzzle.js",
+  "/js/puzzles.js",
+  "/serviceWorker.js",
+  "/js/stats.js",
+  "/js/style.css",
+  "/icons/ToMar24144.png"
 ];
-
 self.addEventListener("install", installEvent => {
   installEvent.waitUntil(
-    caches.open(staticDevCoffee).then(cache => {
+    caches.open(ToMar24).then(cache => {
       cache.addAll(assets);
     })
   );
 });
-
 self.addEventListener("fetch", fetchEvent => {
   fetchEvent.respondWith(
     caches.match(fetchEvent.request).then(res => {

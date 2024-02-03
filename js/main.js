@@ -6,14 +6,21 @@ const puzzlePool = new Puzzles();
 const stats = new Stats();
 let puzzle = null;
 if (stats.getCurrentPuzzle() == null) {
-	puzzle = new Puzzle(puzzlePool.getRandomPuzzle());
+	let newPuzzle = puzzlePool.getRandomPuzzle();
+	puzzle = new Puzzle(newPuzzle);
+	stats.setCurrentPuzzle(newPuzzle);
 } else {
 	puzzle = new Puzzle(stats.getCurrentPuzzle());
 }
 const $ = (x) => { return document.getElementById(x); }	
 const numberButtonColor = "olivedrab";
-const evalButtonColor = "indigo";
 const disabledColor = "gray";
+const parenColor = "goldenrod";
+const operColor = "darkorange";
+const navButtonColor = "indigo";
+const defaultMessage = "Click on numbers and operators to make 24";
+const giveUpText = "Give Up";
+const newPuzzleText = "New Puzzle";
 
 // launch app
 document.addEventListener("readystatechange", (event) => {
@@ -21,70 +28,160 @@ document.addEventListener("readystatechange", (event) => {
 		initApp();
 	}
 });
-
 const initApp = () => {
+	// add listeners to operator buttons, puzzle buttons, and navigation buttons
+	refreshStats();
+	["parenLeft", "parenRight", "operPlus", "operMinus", "operMultiply", "operDivide", "arg0", "arg1", "arg2", "arg3"].forEach((item) => {
+		$(item).addEventListener("click", processArgumentClick);
+	});
+	$("navEvaluate").addEventListener("click", (event) => {
+		let result = evaluateGuess(puzzle.getGuessAsString());
+		if (result == 24) {
+			let numberOfGuesses = puzzle.getFeedback().length + 1;
+			$("message").innerText = `You got it in ${numberOfGuesses} guess(es)!`;
+			stats.setTotalGuesses(stats.getTotalGuesses() + numberOfGuesses);
+			stats.setTotalGames(stats.getTotalGames() + 1);
+			stats.setTotalSolved(stats.getTotalSolved() + 1);
+			stats.setCurrentStreak(stats.getCurrentStreak() + 1);
+			if (stats.getCurrentStreak() > stats.getLongestStreak()) {
+				stats.setLongestStreak(stats.getCurrentStreak());
+			}
+			setDisabled("navBack", true);
+			setDisabled("navClear", true);
+			let loseButton = $("navLose");
+			loseButton.innerText = newPuzzleText;
+			refreshStats();
+		} else if (result == false) {
+			alert("Invalid characters! Don't do that!");
+		} else {
+			let msg = `${guess} = ${result.toFixed(2)}`
+			$("message").innerText = `Sorry, ${msg}`;
+			puzzle.addGuessToFeedback(msg);
+			renderFeedback();
+		}
+		setDisabled("navEvaluate", true);		// true is disabled, false is enabled
+	});
+	$("navClear").addEventListener("click", (event) => {
+		puzzle.clearGuess();
+		[0, 1, 2, 3].forEach ((item) => {
+			setDisabled(`arg${item}`, false);
+		});
+		$("guess").innerText = puzzle.getGuessAsString();
+		$("message").innerText = defaultMessage;
+		setDisabled("navEvaluate", true);
+	});
+	$("navBack").addEventListener("click", (event) => {
+		let backSpaceInfo = puzzle.backSpace();
+		$("guess").innerText = backSpaceInfo["guess"];
+		if (backSpaceInfo["arg"] != null) {
+			setDisabled(`arg${backSpaceInfo["arg"]}`, false);
+		}
+		validateEquation();
+	});
+	let navLose = $("navLose");
+	navLose.addEventListener("click", (event) => {
+		if (navLose.innerText == newPuzzleText) {
+			let newPuzzle = puzzlePool.getRandomPuzzle();
+			puzzle = new Puzzle(newPuzzle);
+			stats.setCurrentPuzzle(newPuzzle);
+			setUpGame();
+		} else {
+			if (confirm("Sure you want to give up?") == true) {
+				$("message").innerText = puzzle.getSolution(); 
+				stats.setTotalGames(stats.getTotalGames() + 1);
+				stats.setCurrentStreak(0);
+				setDisabled("navBack", true);
+				setDisabled("navClear", true);
+				navLose.innerText = newPuzzleText;
+				refreshStats();
+			}
+		}
+	});
+	setUpGame();
+}
+const refreshStats = () => {
 	$("totalSolved").innerText = stats.getTotalSolved(); 
 	$("totalPlayed").innerText = stats.getTotalGames(); 
 	$("currentStreak").innerText = stats.getCurrentStreak(); 
 	$("longestStreak").innerText = stats.getLongestStreak();
+	stats.saveStatsObject(stats);
+}
+const setUpGame = () => {
 	for (let i = 0; i < 4; i++) {
-		$(`arg${i}`).innerText = puzzle.getArguments()[i].getValue();
+		let arg = puzzle.getArguments()[i];
+		$(`arg${arg.getIndex()}`).innerText = arg.getValue();
+		setDisabled(`arg${arg.getIndex()}`, false);
 	}
-	// add listeners to operator buttons, puzzle buttons, and navigation buttons
-	["leftParen", "rightParen", "plusSign", "minusSign", "multiplicationSign", "divisionSign", "arg0", "arg1", "arg2", "arg3"].forEach((item) => {
-		$(item).addEventListener("click", processArgumentClick);
-	});
-	const evalButton = $("evaluate");
-	evalButton.addEventListener("click", (event) => {
-		console.log("got here");
-	});
-	evalButton.setAttribute("disabled", true);
-	evalButton.style.backgroundColor = disabledColor;
+	setDisabled("navEvaluate", true);			// true is disabled, false is enabled
+	setDisabled("navBack", false);			// true is disabled, false is enabled
+	setDisabled("navClear", false);			// true is disabled, false is enabled
+	$("message").innerText = defaultMessage;
+	$("guess").innerText = "";
+	$("navLose").innerText = giveUpText; 
 }
 const renderFeedback = () => {
 	const list = puzzle.getFeedback();
+	const container = $("feedbackItems");
+	container.innerHTML = '';
 	list.forEach((item) => {
-		buildFeedbackItem(item);
+		buildFeedbackItem(item, container);
 	});
+}
+const validateEquation = () => {
+	let validEquation = puzzle.validSolution();
+	if (validEquation["valid"] == true) {
+		setDisabled("navEvaluate", false);
+		$("message").innerText = "Valid equation, you can check it!";
+	} else {
+		setDisabled("navEvaluate", true);
+		$("message").innerText = validEquation["message"];
+	}
 }
 const processArgumentClick = (e) => {
-	let elem = $(e.target.id);
-	puzzle.addTokenToGuess(elem.innerText);
-	if (["arg0", "arg1", "arg2", "arg3"].includes(e.target.id)) {
-		elem.style.backgroundColor = disabledColor;
-		elem.setAttribute("disabled", true);
-		puzzle.getArguments()[partseInt(e.target.id.substring(3))].setDisabled(true);
+	$("message").innerText = "";
+	if (e.target.id.substring(0, 3) == "arg") {
+		puzzle.addTokenToGuess(e.target.id);
+		setDisabled(e.target.id, true);
+	} else {
+		puzzle.addTokenToGuess($(e.target.id).innerText);
 	}
-	$("guess").innerText = puzzle.getGuessAsString();
-	if (puzzle.validSolution() == true) {
-		$("evaluate").disabled = false;
-	}
+	let puzzleString = puzzle.getGuessAsString();
+	$("guess").innerText = puzzleString;
+	validateEquation();
 }
-const buildFeedbackItem = (item) => {
+const buildFeedbackItem = (item, container) => {
 	const div = document.createElement("div");
 	div.className = "item";
-	const container = $("feedbackItems");
+	div.innerText = item;
 	container.appendChild(div);
 }
-
-const addClickListenerToCheckbox = (checkbox) => {
-	checkbox.addEventListener("click", (event) => {
-		toDoList.removeItemFromList(checkbox.id);
-		updatePersistentData(toDoList.getList());
-		setTimeout(() => {
-			refreshThePage();
-		}, 1000);
-	});
+const setDisabled = (elemName, bool) => {
+	let elem = $(elemName);
+	elem.disabled = bool;
+	if (bool == true) {
+		elem.style.backgroundColor = disabledColor;
+	} else {
+		elem.style.backgroundColor = getButtonColor(elemName);
+	}
+	if (elemName.substring(0, 3) == "arg") {
+		puzzle.getArguments()[puzzle.getArgumentByIndex(parseInt(elemName.substring(3)))].setDisabled(bool);
+	}
 }
-const updatePersistentData = (listArray) => {
-	localStorage.setItem("tm24stats", JSON.stringify(stats));
+const getButtonColor = (elemName) => {
+	if (elemName.substring(0, 3) == "arg") {
+		return numberButtonColor;
+	} else if (elemName.substring(0, 5) == "paren") {
+		return parenColor;
+	} else if (elemName.substring(0, 4) == "oper") {
+		return operColor;
+	} else {
+		return navButtonColor;
+	}
 }
-const processSubmission = () => {
-	const newEntryText = getNewEntry();
-	if (!newEntryText.length) return;
-	const nextItemId = calcNextItemId();
-	const toDoItem = createNewItem(nextItemId, newEntryText);
-	toDoList.addItemToList(toDoItem);
-	updatePersistentData(toDoList.getList()); 
-	refreshThePage();
+const evaluateGuess = (guess) => {
+	const regex = /[^0-9+\-*/()]/;
+	if (!regex.test(guess)) {
+ 		return false;
+	} 
+	return eval(guess);
 }
