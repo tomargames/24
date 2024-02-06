@@ -5,49 +5,32 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="manifest" href="data/manifest.json"/>
 	<link rel="icons" href="icons"/>	
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="stylesheet" href="js/style.css">
 	<script src="js/main.js" type="module"></script>
 	<title>ToMar 24</title>
 </head>
 <body>
 	<main>
-		<section class="statsArea">
-			<span class="stat">
-				<b>Solved:&nbsp;</b>
-				<span id="totalSolved">0</span>
-			</span>
-			<span class="stat">
-				<b>Played:&nbsp;</b>
-				<span id="totalPlayed">0</span>
-			</span>
-			<span class="stat">
-				<b>Current:&nbsp;</b>
-				<span id="currentStreak">0</span>
-			</span>
-			<span class="stat">
-				<b>Longest:&nbsp;</b>
-				<span id="longestStreak">0</span>
-			</span>
-		</section>
 		<section class="operatorButtons">
 			<button class="button oper" id="operPlus" title="Plus Sign" aria-label="Insert Plus Sign" tabindex="0">+</button>
 			<button class="button oper" id="operMinus" title="Minus Sign" aria-label="Insert Minus Sign" tabindex="0">-</button>
 			<button class="button oper" id="operMultiply" title="Multiplication Sign" aria-label="Insert Multiplication Sign" tabindex="0">*</button>
 			<button class="button oper" id="operDivide" title="Division Sign" aria-label="Insert Division Sign" tabindex="0">/</button>
+		</section>
+		<section class="operatorButtons">
 			<button class="button paren" id="parenLeft" title="Left Parenthesis" aria-label="Insert Left Parenthesis" tabindex="0">(</button>
 			<button class="button paren" id="parenRight" title="Right Parenthesis" aria-label="Insert Right Parenthesis" tabindex="0">)</button>
 		</section>
-		<section class="puzzleButtons">
+		<section class="numberButtons">
 			<button class="button number" id="arg0" title="Number Button 1" aria-label="Number Button 1" tabindex="0">*</button>
 			<button class="button number" id="arg1" title="Number Button 2" aria-label="Number Button 2" tabindex="0">*</button>
 			<button class="button number" id="arg2" title="Number Button 3" aria-label="Number Button 3" tabindex="0">*</button>
 			<button class="button number" id="arg3" title="Number Button 4" aria-label="Number Button 4" tabindex="0">*</button>
 		</section>
-		<br><br><br>
+		<br>
 		<div class="guess" id="guess"></div>
-		<br><div id="message" class="message"></div>
+		<br>
+		<div id="message" class="message"></div>
 		<br>
 		<section class="navigation">
 			<button class="button nav" id="navEvaluate" title="Evaluate guess" aria-label="Evaluate guess" tabindex="0">Check</button>
@@ -60,9 +43,41 @@
 				<p tabindex="0">ToMar24</p>
 			</div>
 			<hr/>
-			<div id="feedbackItems" class="feedbackItems">
-			<!-- this will be where we do a foreach on  -->
-			</div>
+			<table width="100%"><tr valign="top">
+			<td width="50%" id="statsArea" style="background-color: gray">
+				<span class="stat">
+					<b>Total Solved:&nbsp;</b>
+					<span id="totalSolved">0</span>
+				</span>
+				<span class="stat">
+					<b>Total Played:&nbsp;</b>
+					<span id="totalPlayed">0</span>
+				</span>
+				<span class="stat">
+					<b>Current Streak:&nbsp;</b>
+					<span id="currentStreak">0</span>
+				</span>
+				<span class="stat">
+					<b>Longest Streak:&nbsp;</b>
+					<span id="longestStreak">0</span>
+				</span>
+				<span class="stat">
+					<b>Total Guesses:&nbsp;</b>
+					<span id="totalGuesses">0</span>
+				</span>
+				<span class="stat">
+					<b>Avg Guesses:&nbsp;</b>
+					<span id="averageGuesses">0</span>
+				</span>
+				<span class="stat">
+					<b>Solve Rate:&nbsp;</b>
+					<span id="solveRate">0</span>
+				</span>
+			</td>
+			<td width="50%" id="feedbackItems"></td>
+				<!-- incorrect guesses -->
+			</td>
+			</tr></table>
 		</section>
 	</main>
 </body>

@@ -31,14 +31,27 @@ document.addEventListener("readystatechange", (event) => {
 const initApp = () => {
 	// add listeners to operator buttons, puzzle buttons, and navigation buttons
 	refreshStats();
+	let windowWidth = window.innerWidth;
 	["parenLeft", "parenRight", "operPlus", "operMinus", "operMultiply", "operDivide", "arg0", "arg1", "arg2", "arg3"].forEach((item) => {
-		$(item).addEventListener("click", processArgumentClick);
+		let button = $(item);
+		button.addEventListener("click", processArgumentClick);
+		if (item.substring(0, 3) == "arg") {
+			if (windowWidth <= 600) {
+				button.style.fontSize = '2em';
+			} else if (windowWidth <= 900) {
+				button.style.fontSize = '2.5em';
+			} else {
+				button.style.fontSize = '3em';
+			}
+		}
 	});
 	$("navEvaluate").addEventListener("click", (event) => {
 		let result = evaluateGuess(puzzle.getGuessAsString());
+		if (result.toFixed(2) == 24.00) result = 24;
 		if (result == 24) {
 			let numberOfGuesses = puzzle.getFeedback().length + 1;
-			$("message").innerText = `You got it in ${numberOfGuesses} guess(es)!`;
+			let g = (numberOfGuesses == 1) ? "guess" : "guesses";
+			$("message").innerText = `You got it in ${numberOfGuesses} ${g}!`;
 			stats.setTotalGuesses(stats.getTotalGuesses() + numberOfGuesses);
 			stats.setTotalGames(stats.getTotalGames() + 1);
 			stats.setTotalSolved(stats.getTotalSolved() + 1);
@@ -54,7 +67,7 @@ const initApp = () => {
 		} else if (result == false) {
 			alert("Invalid characters! Don't do that!");
 		} else {
-			let msg = `${guess} = ${result.toFixed(2)}`
+			let msg = `${guess.innerText} = ${result.toFixed(2)}`;
 			$("message").innerText = `Sorry, ${msg}`;
 			puzzle.addGuessToFeedback(msg);
 			renderFeedback();
@@ -85,6 +98,7 @@ const initApp = () => {
 			puzzle = new Puzzle(newPuzzle);
 			stats.setCurrentPuzzle(newPuzzle);
 			setUpGame();
+			renderFeedback();
 		} else {
 			if (confirm("Sure you want to give up?") == true) {
 				$("message").innerText = puzzle.getSolution(); 
@@ -104,6 +118,14 @@ const refreshStats = () => {
 	$("totalPlayed").innerText = stats.getTotalGames(); 
 	$("currentStreak").innerText = stats.getCurrentStreak(); 
 	$("longestStreak").innerText = stats.getLongestStreak();
+	$("totalGuesses").innerText = stats.getTotalGuesses();
+	if (stats.getTotalGuesses() == 0) {
+		$("averageGuesses").innerText = "--";
+		$("solveRate").innerText = "--";
+	} else {
+		$("averageGuesses").innerText = (stats.getTotalGuesses()/stats.getTotalSolved()).toFixed(2);
+		$("solveRate").innerText = (stats.getTotalSolved()/stats.getTotalGames()).toFixed(2);
+	}
 	stats.saveStatsObject(stats);
 }
 const setUpGame = () => {
@@ -117,7 +139,7 @@ const setUpGame = () => {
 	setDisabled("navClear", false);			// true is disabled, false is enabled
 	$("message").innerText = defaultMessage;
 	$("guess").innerText = "";
-	$("navLose").innerText = giveUpText; 
+	$("navLose").innerText = giveUpText;
 }
 const renderFeedback = () => {
 	const list = puzzle.getFeedback();
