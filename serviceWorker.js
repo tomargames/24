@@ -2,14 +2,13 @@ const ToMar24 = "dev-tomar24-site-v1";
 const assets = [
   "/",
   "/index.html",
+  "/serviceWorker.js",
   "/js/style.css",
   "/js/main.js",
   "/js/argument.js",
   "/js/puzzle.js",
   "/js/puzzles.js",
-  "/serviceWorker.js",
   "/js/stats.js",
-  "/js/style.css",
   "/icons/ToMar24144.png"
 ];
 self.addEventListener("install", installEvent => {

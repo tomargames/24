@@ -1,7 +1,7 @@
 {
   "name": "ToMar24",
   "short_name": "ToMar24",
-  "start_url": "index.html",
+  "start_url": "../index.html",
   "display": "standalone",
   "background_color": "#eee",
   "description": "ToMar24",

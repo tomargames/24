@@ -11,7 +11,7 @@ export default class Stats {
 			let stored = JSON.parse(statsObject);
 			this.setTotalGames(stored["_totalGames"]);
 			this.setTotalSolved(stored["_totalSolved"]);
-			this.setTotalSolved(stored["_totalGuesses"]);
+			this.setTotalGuesses(stored["_totalGuesses"]);
 			this.setCurrentStreak(stored["_currentStreak"]);
 			this.setLongestStreak(stored["_longestStreak"]);
 			this.setCurrentPuzzle(stored["_currentPuzzle"]);
@@ -29,7 +29,6 @@ export default class Stats {
 	getTotalGames() {
 		return this._totalGames;
 	}
-	
 	setTotalGames(value) {
 		if (value > 0) this._totalGames = value;
 	}

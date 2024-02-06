@@ -24,7 +24,7 @@ body {
 section {
 	background-color: black;
 	color: #ddd;
-	width: 90%;
+	width: 100%;
 	max-width: 700px;
 	margin: auto;
 	border: 1px solid #000;
@@ -33,37 +33,34 @@ section {
 }
 .operatorButtons {
 	display: flex;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	background-color: black;
 }
 .numberButtons {
 	display: flex;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	background-color: black;
 }
 .statsArea {
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	background-color: black;
 }
 .stat {
-	display: inline-flex;
-	justify-content: space-between;
-	padding: .5em;
-	color:beige;
-	font-size: 1.25em;
+	display: block;
+	font-size: 1em;
+	text-align: left;
+	color: indigo;
 }
 .button {
-	width: 20%;
-	min-width: 48px;
-	min-height: 48px;
+	font-size: 2em;
+	width: fit-content;
 	text-align:center;
 	color: #000;
-	border: 2px solid black;
 	border-radius: 10px;
 	outline: none;
 }
-.button:hover {
+.button:hover { 
 	cursor: pointer;
 }
 .button:hover,
@@ -74,7 +71,6 @@ section {
 .button.oper {
 	display: flex;
 	justify-content: space-around;
-	font-size: 2em;
 	background-color: darkorange;
 	padding: .5em;
 	margin-top: 0.5em;
@@ -83,19 +79,23 @@ section {
 .button.paren {
 	display: flex;
 	justify-content: space-around;
-	font-size: 2em;
 	background-color: goldenrod;
 	padding: .5em;
 	margin-top: 0.5em;
 	margin-bottom: 0.5rem;
 }
 .button.number {
-	font-size: 2.5em;
 	background-color: olivedrab;
 	padding: .5em;
 	margin-top: 0.5em;
 	margin-bottom: 0.5rem;
+	container-name: numberButton;
 }
+media only screen and (min-width: 700px) {
+	button.number {
+		font-size: 3em;
+	}
+  }
 .button.nav {
 	font-size: 1rem;
 	background-color: indigo;
@@ -112,7 +112,6 @@ section {
 .feedbackArea {
 	min-height: 60vh;
 	padding: 0.75rem;
-	margin: 1rem;
 	text-align: center;
 	font-size: 1em;
 }
@@ -125,12 +124,13 @@ section {
 .feedbackArea .item {
 	display: flex;
 	justify-content: flex-start;
-	align-items: center;
-	padding-top: 1rem;
+	color:lavender;
+	align-items: left;
+	padding-top: .1rem;
 }
 .message {
 	text-align: center;
-	color: red;
+	color: goldenrod;
 	background-color: black;;
 	font-size: 1em;
 }
