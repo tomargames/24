@@ -5,13 +5,6 @@ import Puzzles from "./puzzles.js";
 const puzzlePool = new Puzzles();
 const stats = new Stats();
 let puzzle = null;
-if (stats.getCurrentPuzzle() == null) {
-	let newPuzzle = puzzlePool.getRandomPuzzle();
-	puzzle = new Puzzle(newPuzzle);
-	stats.setCurrentPuzzle(newPuzzle);
-} else {
-	puzzle = new Puzzle(stats.getCurrentPuzzle());
-}
 const $ = (x) => { return document.getElementById(x); }	
 const numberButtonColor = "olivedrab";
 const disabledColor = "gray";
@@ -30,7 +23,12 @@ document.addEventListener("readystatechange", (event) => {
 });
 const initApp = () => {
 	// add listeners to operator buttons, puzzle buttons, and navigation buttons
-	refreshStats();
+	if (stats.getCurrentPuzzle() == null) {
+		puzzle = getRandomPuzzle();
+	} else {
+		puzzle = new Puzzle(stats.getCurrentPuzzle());
+	}
+		refreshStats();
 	let windowWidth = window.innerWidth;
 	["parenLeft", "parenRight", "operPlus", "operMinus", "operMultiply", "operDivide", "arg0", "arg1", "arg2", "arg3"].forEach((item) => {
 		let button = $(item);
@@ -59,6 +57,7 @@ const initApp = () => {
 			if (stats.getCurrentStreak() > stats.getLongestStreak()) {
 				stats.setLongestStreak(stats.getCurrentStreak());
 			}
+			stats.setCurrentPuzzle(null);
 			setDisabled("navBack", true);
 			setDisabled("navClear", true);
 			let loseButton = $("navLose");
@@ -94,9 +93,7 @@ const initApp = () => {
 	let navLose = $("navLose");
 	navLose.addEventListener("click", (event) => {
 		if (navLose.innerText == newPuzzleText) {
-			let newPuzzle = puzzlePool.getRandomPuzzle();
-			puzzle = new Puzzle(newPuzzle);
-			stats.setCurrentPuzzle(newPuzzle);
+			puzzle = getRandomPuzzle();
 			setUpGame();
 			renderFeedback();
 		} else {
@@ -104,6 +101,7 @@ const initApp = () => {
 				$("message").innerText = puzzle.getSolution(); 
 				stats.setTotalGames(stats.getTotalGames() + 1);
 				stats.setCurrentStreak(0);
+				stats.setCurrentPuzzle(null);
 				setDisabled("navBack", true);
 				setDisabled("navClear", true);
 				navLose.innerText = newPuzzleText;
@@ -206,4 +204,9 @@ const evaluateGuess = (guess) => {
  		return false;
 	} 
 	return eval(guess);
+}
+const getRandomPuzzle = () => {
+	let newPuzzle = puzzlePool.getRandomPuzzle();
+	stats.setCurrentPuzzle(newPuzzle);
+	return new Puzzle(newPuzzle);
 }

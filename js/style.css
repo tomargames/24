@@ -31,12 +31,7 @@ section {
 	border-radius: 10px;
 	text-align: center;
 }
-.operatorButtons {
-	display: flex;
-	justify-content: space-evenly;
-	background-color: black;
-}
-.numberButtons {
+.operatorButtons, .numberButtons, .navigation {
 	display: flex;
 	justify-content: space-evenly;
 	background-color: black;
