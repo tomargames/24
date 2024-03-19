@@ -1,9 +1,11 @@
 import Puzzle from "./puzzle.js";
 import Stats from "./stats.js";
-import Puzzles from "./puzzles.js";
 
 const puzzlePool = new Puzzles();
-const stats = new Stats();
+const targetNumber = 24;
+const localStorageId = `tm${targetNumber}stats`;
+const puzzleFileName = `puzzles${targetNumber}.json}`;
+const stats = new Stats(localStorageId);
 let puzzle = null;
 const $ = (x) => { return document.getElementById(x); }	
 const numberButtonColor = "olivedrab";
@@ -11,9 +13,10 @@ const disabledColor = "gray";
 const parenColor = "goldenrod";
 const operColor = "darkorange";
 const navButtonColor = "indigo";
-const defaultMessage = "Click on numbers and operators to make 24";
+const defaultMessage = `Click on numbers and operators to make ${targetNumber}`;
 const giveUpText = "Give Up";
 const newPuzzleText = "New Puzzle";
+import Puzzles from puzzleFileName;
 
 // launch app
 document.addEventListener("readystatechange", (event) => {
@@ -45,8 +48,8 @@ const initApp = () => {
 	});
 	$("navEvaluate").addEventListener("click", (event) => {
 		let result = evaluateGuess(puzzle.getGuessAsString());
-		if (result.toFixed(2) == 24.00) result = 24;
-		if (result == 24) {
+		if (result.toFixed(2) == targetNumber) result = targetNumber;
+		if (result == targetNumber) {
 			let numberOfGuesses = puzzle.getFeedback().length + 1;
 			let g = (numberOfGuesses == 1) ? "guess" : "guesses";
 			$("message").innerText = `You got it in ${numberOfGuesses} ${g}!`;

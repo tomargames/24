@@ -6,8 +6,7 @@ const assets = [
   "/js/style.css",
   "/js/main.js",
   "/js/argument.js",
-  "/js/puzzle.js",
-  "/js/puzzles.js",
+  "/js/puzzles24.js",
   "/js/stats.js",
   "/icons/ToMar24144.png"
 ];
@@ -20,7 +19,7 @@ self.addEventListener("install", installEvent => {
 });
 self.addEventListener("fetch", fetchEvent => {
   fetchEvent.respondWith(
-    caches.match(fetchEvent.request).then(res => {
+    caches.match(fetchEvent.request, {ignoreSearch: true}).then(res => {
       return res || fetch(fetchEvent.request);
     })
   );
